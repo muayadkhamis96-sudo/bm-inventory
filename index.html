@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>NHC PPCSU – Biomedical Monthly Inventory 2026</title>
+<style>
+  /* Prevent iOS Safari from auto-inflating text and keep rendering consistent across devices */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  :root {
+    --blue: #1a56a0;
+    --blue-light: #e8f0fb;
+    --blue-mid: #3b78d4;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --red: #dc2626;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray-100); color: var(--gray-800); min-height: 100vh; }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    color: #fff;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.18);
+  }
+  header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: .3px; }
+  header h1 span { display: block; font-size: .8rem; font-weight: 400; opacity: .8; margin-top: 2px; }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    max-width: 420px;
+  }
+  .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--gray-400); }
+  #searchInput {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  #searchInput:focus { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(59,120,212,.12); }
+
+  .btn {
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    border: none;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-mid); }
+  .btn-outline { background: #fff; color: var(--gray-600); border: 1.5px solid var(--gray-200); }
+  .btn-outline:hover { border-color: var(--blue-mid); color: var(--blue); }
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-success { background: var(--green); color: #fff; }
+
+  #adminBadge {
+    margin-left: auto;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: .78rem;
+    font-weight: 700;
+    display: none;
+  }
+  #adminBadge.visible { display: inline-block; }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 16px 32px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    border: 1px solid var(--gray-200);
+    min-width: 150px;
+  }
+  .stat-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .stat-icon.blue { background: var(--blue-light); color: var(--blue); }
+  .stat-icon.green { background: var(--green-light); color: var(--green); }
+  .stat-icon.orange { background: #fff7ed; color: #ea580c; }
+  .stat-num { font-size: 1.35rem; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: .72rem; color: var(--gray-600); margin-top: 2px; }
+
+  /* ── Month selector ── */
+  .month-bar {
+    padding: 0 32px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .month-bar label { font-size: .82rem; font-weight: 600; color: var(--gray-600); margin-right: 4px; }
+  .month-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--gray-200);
+    background: #fff;
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    color: var(--gray-600);
+  }
+  .month-pill:hover { border-color: var(--blue-mid); color: var(--blue); }
+  .month-pill.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  /* ── Table container ── */
+  .table-wrap {
+    margin: 0 32px 32px;
+    background: #fff;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    overflow: hidden;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch; /* momentum scroll on iOS */
+    overscroll-behavior-x: contain;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  thead th {
+    background: var(--blue);
+    color: #fff;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+  thead th.month-col { text-align: center; min-width: 48px; }
+  thead .sub-header th {
+    background: #1746a0;
+    font-size: .72rem;
+    padding: 7px 10px;
+    font-weight: 500;
+    letter-spacing: .3px;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--gray-100); transition: background .1s; }
+  tbody tr:hover { background: var(--blue-light); }
+  tbody tr.category-row { background: var(--gray-50); }
+  td { padding: 10px 14px; vertical-align: middle; }
+  td.center { text-align: center; }
+  td.bio-col { font-family: 'Courier New', monospace; font-size: .8rem; color: var(--blue); font-weight: 600; }
+  td.item-col { font-weight: 500; max-width: 260px; }
+  td.qty-col { text-align: center; font-weight: 700; color: var(--blue); }
+  td.remarks-col { font-size: .78rem; color: var(--gray-600); max-width: 180px; }
+  .bio-tag {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--blue);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: .74rem;
+    font-family: monospace;
+    font-weight: 600;
+    margin: 1px;
+    white-space: nowrap;
+  }
+  .bio-tag.highlight { background: #fef08a; color: #854d0e; border: 1px solid #fbbf24; }
+
+  /* ── Tri-state check cell ── */
+  .check-cell { text-align: center; padding: 5px 4px; }
+  .chk-btns { display: flex; gap: 3px; justify-content: center; }
+  .chk-btn {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    border: 2px solid var(--gray-200);
+    background: #fff;
+    cursor: pointer;
+    font-size: .85rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    line-height: 1;
+  }
+  .chk-btn:hover { transform: scale(1.1); }
+  .chk-btn.found  { background: var(--green); border-color: var(--green); color: #fff; }
+  .chk-btn.missing { background: var(--red); border-color: var(--red); color: #fff; }
+  .chk-btn:not(.found):not(.missing):hover.is-found  { border-color: var(--green); background: var(--green-light); }
+  .chk-btn:not(.found):not(.missing):hover.is-missing { border-color: var(--red); background: #fee2e2; }
+  .missing-note {
+    font-size: .68rem; color: var(--red); margin-top: 2px;
+    max-width: 70px; word-break: break-word; line-height: 1.2;
+  }
+  .check-cell.readonly .chk-btn { cursor: default; pointer-events: none; }
+
+  /* ── Future month (locked) ── */
+  .check-cell.future { background: var(--gray-50); }
+  .check-cell.future .chk-btn { opacity: .25; pointer-events: none; cursor: not-allowed; }
+  .future-lock { font-size: .72rem; color: var(--gray-400); display: block; text-align: center; }
+
+  /* ── Overdue ── */
+  .overdue-badge {
+    display: inline-block;
+    background: #fff7ed; color: #c2410c;
+    border: 1px solid #fed7aa;
+    border-radius: 4px;
+    font-size: .62rem; font-weight: 800;
+    padding: 1px 5px;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .summary-overdue {
+    font-size: .7rem; font-weight: 700; color: #c2410c;
+    background: #fff7ed; border: 1px solid #fed7aa;
+    border-radius: 4px; padding: 1px 5px;
+    display: inline-block;
+  }
+
+  /* ── Expand/collapse ── */
+  .expand-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--blue); font-size: .8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 4px;
+    padding: 2px 4px; border-radius: 4px;
+    transition: background .12s;
+    white-space: nowrap;
+  }
+  .expand-btn:hover { background: var(--blue-light); }
+  .expand-btn .arrow { font-size: .7rem; transition: transform .2s; display:inline-block; }
+  .expand-btn.open .arrow { transform: rotate(90deg); }
+  .bio-count-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--blue-light); color: var(--blue);
+    border-radius: 20px; padding: 2px 10px;
+    font-size: .75rem; font-weight: 700;
+  }
+  tr.bio-sub-row { background: #fafcff; }
+  tr.bio-sub-row td { padding-top: 6px; padding-bottom: 6px; }
+  tr.bio-sub-row .bio-tag { font-size: .78rem; }
+  .summary-chk {
+    font-size: .74rem; font-weight: 600; color: var(--gray-400);
+    text-align: center;
+  }
+  .summary-chk.has-data { color: var(--green); }
+
+  /* ── Sign-off section ── */
+  .signoff-section {
+    margin: 0 32px 40px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    padding: 24px 28px;
+  }
+  .signoff-section h3 {
+    font-size: .85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--blue);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--blue-light);
+  }
+  .signoff-fields { display: flex; gap: 32px; flex-wrap: wrap; }
+  .signoff-field { flex: 1; min-width: 200px; }
+  .signoff-field label {
+    display: block;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: var(--gray-600);
+    margin-bottom: 6px;
+  }
+  .signoff-field input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: .9rem;
+    font-family: inherit;
+    outline: none;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    transition: border-color .2s;
+  }
+  .signoff-field input:focus { border-color: var(--blue-mid); background: #fff; box-shadow: 0 0 0 3px rgba(59,120,212,.1); }
+  .signoff-field input:read-only { cursor: default; color: var(--gray-600); }
+  .signoff-field input.has-value { background: #fff; border-color: var(--green); }
+  .signoff-note { font-size: .74rem; color: var(--gray-400); margin-top: 14px; }
+
+  /* ── Missing remark modal ── */
+  #missingModal .modal { max-width: 420px; }
+  #missingModal textarea {
+    width: 100%; min-height: 80px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: .88rem;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+  }
+  #missingModal textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1); }
+  .modal-error-inline { font-size: .78rem; color: var(--red); margin-bottom: 8px; display: none; }
+
+  /* ── No results ── */
+  .no-results { padding: 48px; text-align: center; color: var(--gray-400); }
+  .no-results svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: .4; }
+
+  /* ── Admin modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  }
+  .modal h2 { font-size: 1.1rem; margin-bottom: 6px; }
+  .modal p { font-size: .85rem; color: var(--gray-600); margin-bottom: 20px; }
+  .modal input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: .9rem;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .modal input:focus { border-color: var(--blue-mid); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-error { font-size: .8rem; color: var(--red); margin-bottom: 10px; display: none; }
+
+  /* ── Remarks editable ── */
+  td.remarks-col[contenteditable="true"] {
+    background: #fffbeb;
+    outline: none;
+    border: 1px dashed #f59e0b;
+    border-radius: 4px;
+    padding: 6px 10px;
+  }
+
+  /* ── Print ── */
+  @media print {
+    header, .toolbar, .stats-bar, .month-bar { display: none !important; }
+    .table-wrap { margin: 0; border: none; box-shadow: none; }
+    body { background: #fff; }
+    .check-cell label { border-color: #999; }
+    .check-cell input[type=checkbox]:checked + label { background: #333 !important; }
+    .btn, #adminBadge { display: none !important; }
+  }
+
+  /* ── Tablet (iPad portrait/landscape: 601–1024px) ── */
+  @media (max-width: 1024px) {
+    header { padding: 18px 20px; }
+    .toolbar { padding: 12px 20px; }
+    .stats-bar { padding: 14px 20px; gap: 12px; }
+    .month-bar { padding: 0 20px 12px; }
+    .table-wrap { margin: 0 20px 24px; }
+    .signoff-section { margin: 0 20px 32px; }
+    .stat-card { flex: 1 1 calc(50% - 12px); min-width: 0; } /* 2 cards per row */
+    .search-wrap { max-width: none; flex: 1 1 100%; order: -1; } /* full-width search on its own line */
+  }
+
+  /* ── Phone (≤600px) ── */
+  @media (max-width: 600px) {
+    header { padding: 14px 16px; }
+    header h1 { font-size: 1.05rem; }
+    .toolbar { padding: 10px 16px; gap: 8px; }
+    .stats-bar { padding: 12px 16px; }
+    .month-bar { padding: 0 16px 12px; }
+    .table-wrap { margin: 0 0 24px; border-radius: 0; border-left: none; border-right: none; }
+    .signoff-section { margin: 0 16px 28px; }
+    .stat-card { flex: 1 1 100%; } /* 1 card per row */
+    .btn { padding: 8px 12px; font-size: .8rem; }
+  }
+
+  /* ── Bio add/delete (Admin) ── */
+  .bio-del-btn {
+    margin-left: 8px; border: none; background: #fee2e2; color: var(--red);
+    width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+    font-size: .7rem; line-height: 1; vertical-align: middle;
+  }
+  .bio-del-btn:hover { background: var(--red); color: #fff; }
+  .bio-add-btn {
+    border: 1px dashed var(--blue); background: var(--blue-light); color: var(--blue);
+    padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: .78rem; font-weight: 600;
+  }
+  .bio-add-btn:hover { background: var(--blue); color: #fff; }
+  .bio-edit-btn {
+    margin-left: 6px; border: none; background: var(--blue-light); color: var(--blue);
+    width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: .7rem; line-height: 1; vertical-align: middle;
+  }
+  .bio-edit-btn:hover { background: var(--blue); color: #fff; }
+
+  /* ── Item add/edit/delete (Admin) ── */
+  .admin-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0 0 14px; }
+  .admin-tools-hint { font-size: .78rem; color: var(--gray-400); }
+  .mini-edit, .mini-del {
+    border: none; background: transparent; cursor: pointer; font-size: .85rem;
+    padding: 2px 4px; border-radius: 4px; vertical-align: middle; opacity: .7;
+  }
+  .mini-edit:hover { background: var(--blue-light); opacity: 1; }
+  .mini-del:hover  { background: #fee2e2; opacity: 1; }
+  .qty-edit {
+    border: 1px solid var(--gray-100); background: #fff; cursor: pointer;
+    padding: 2px 8px; border-radius: 6px; font-size: .82rem; font-weight: 600; color: var(--blue);
+  }
+  .qty-edit:hover { background: var(--blue-light); }
+  .remarks-col { font-size: .82rem; color: var(--gray-500, #475569); white-space: normal; min-width: 160px; max-width: 260px; }
+
+  /* ── Verify bar / save ── */
+  .verify-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  .verify-chip { padding: 6px 12px; border-radius: 20px; font-size: .8rem; font-weight: 600; }
+  .verify-chip.ok      { background: #dcfce7; color: #15803d; }
+  .verify-chip.pending { background: #fef9c3; color: #a16207; }
+  .verify-chip.none    { background: var(--gray-100); color: var(--gray-400); }
+
+  /* ── Notification banner (View) ── */
+  .notify-banner {
+    display: flex; align-items: center; gap: 10px; margin: 0 0 18px;
+    padding: 12px 18px; border-radius: 12px; background: #fffbeb;
+    border: 1px solid #fde68a; color: #92400e; font-size: .9rem;
+  }
+  .notify-icon { font-size: 1.2rem; }
+  .notify-link {
+    border: none; background: #fde68a; color: #92400e; padding: 3px 10px;
+    border-radius: 14px; cursor: pointer; font-weight: 700; margin: 0 2px;
+  }
+  .notify-link:hover { background: #fbbf24; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+    background: #1e293b; color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: .9rem; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    opacity: 0; pointer-events: none; transition: all .3s ease; z-index: 9999; max-width: 90vw;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media print { .notify-banner, .verify-bar, #toast { display: none !important; } }
+
+  /* ── Login gate ── */
+  #loginGate {
+    position: fixed; inset: 0; z-index: 10000;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+  }
+  body.locked { overflow: hidden; }
+  .gate-card {
+    background: #fff; border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 380px;
+    text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.3);
+  }
+  .gate-logo { font-size: 2.6rem; margin-bottom: 8px; }
+  .gate-title { font-size: 1.7rem; font-weight: 800; letter-spacing: .5px; color: var(--blue); margin: 0; }
+  .gate-sub { font-size: .92rem; color: var(--gray-500, #475569); margin: 4px 0 22px; font-weight: 600; }
+  .gate-instruction { font-size: .88rem; color: var(--gray-400); margin: 0 0 14px; }
+  #gatePw {
+    width: 100%; padding: 13px 16px; border: 2px solid var(--gray-100); border-radius: 10px;
+    font-size: 1rem; text-align: center; outline: none; transition: border-color .2s;
+  }
+  #gatePw:focus { border-color: var(--blue); }
+  .gate-error { color: var(--red); font-size: .82rem; min-height: 18px; margin: 8px 0 4px; font-weight: 600; }
+  .gate-btn { width: 100%; justify-content: center; padding: 13px; font-size: 1rem; }
+  .gate-foot { font-size: .72rem; color: var(--gray-400); margin: 18px 0 0; letter-spacing: .4px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- Hidden file picker for Import/Restore -->
+<input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="handleImportFile(this)">
+
+<!-- ── Login gate (covers everything until a valid password is entered) ── -->
+<div id="loginGate">
+  <div class="gate-card">
+    <div class="gate-logo">🔐</div>
+    <h1 class="gate-title">PPCSU NHC</h1>
+    <p class="gate-sub">Biomedical Monthly Inventory</p>
+    <p class="gate-instruction">Enter your password to access the inventory.</p>
+    <input type="password" id="gatePw" placeholder="Password" autocomplete="off"
+           onkeydown="if(event.key==='Enter')gateLogin()">
+    <div class="gate-error" id="gateError"></div>
+    <button class="btn btn-primary gate-btn" onclick="gateLogin()">Unlock</button>
+    <p class="gate-foot">Authorised personnel only</p>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <h1>PPCSU NHC – Biomedical Monthly Inventory</h1>
+</header>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search by Bio number or item name…" oninput="applySearch()">
+  </div>
+  <button class="btn btn-outline" onclick="window.print()">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print
+  </button>
+  <button class="btn btn-outline" id="adminLoginBtn" onclick="openAdminModal()" style="display:none">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    Login
+  </button>
+<button class="btn btn-danger" id="adminLogoutBtn" onclick="adminLogout()" style="display:none">Logout</button>
+  <span id="adminBadge">⚡ Laila AlZadjali — <span id="loginDate"></span></span>
+</div>
+
+<!-- Verifier notification banner -->
+<div id="notifyBanner" class="notify-banner" style="display:none"></div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-icon blue">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    </div>
+    <div><div class="stat-num" id="statItems">–</div><div class="stat-label">Item Types</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+    </div>
+    <div><div class="stat-num" id="statQty">–</div><div class="stat-label">Total Units</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <div><div class="stat-num" id="statMonth">–</div><div class="stat-label">Current Month</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <div><div class="stat-num" id="statVerified">–</div><div class="stat-label">Verified This Month</div></div>
+  </div>
+</div>
+
+<!-- Month selector -->
+<div class="month-bar">
+  <label>View Month:</label>
+</div>
+
+<!-- Admin tools -->
+<div id="adminTools" class="admin-tools" style="display:none"></div>
+
+<!-- Table -->
+<div class="table-wrap">
+  <div class="table-scroll">
+    <table id="invTable">
+      <thead>
+        <tr id="tableHeader"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="no-results" id="noResults" style="display:none">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <div>No items match your search</div>
+    </div>
+  </div>
+</div>
+
+<!-- Sign-off section -->
+<div class="signoff-section">
+  <h3 id="signoffTitle">Monthly Sign-off</h3>
+  <div class="signoff-fields">
+    <div class="signoff-field">
+      <label>Checked By</label>
+      <input type="text" id="checkedByInput" placeholder="Enter name…" oninput="saveSignOff()" readonly>
+    </div>
+    <div class="signoff-field">
+      <label>Verified By</label>
+      <input type="text" id="verifiedByInput" placeholder="Enter name…" oninput="saveSignOff()" readonly>
+    </div>
+  </div>
+  <div class="signoff-note">Checked By = Admin/User · Verified By = Admin/View. Changes auto-save. Press <strong>Save &amp; Send to Verify</strong> to notify the Verifier.</div>
+  <div id="verifyBar" class="verify-bar"></div>
+</div>
+
+<!-- Admin Modal -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal">
+    <h2>🔐 Login</h2>
+    <p>Enter your password. Your role (Admin / User / View) is detected automatically.</p>
+    <input type="password" id="adminPw" placeholder="Password" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <div class="modal-error" id="pwError">Incorrect password. Try again.</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeAdminModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="checkAdmin()">Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- Missing Remark Modal -->
+<div class="modal-overlay" id="missingModal">
+  <div class="modal">
+    <h2>Item Not Found</h2>
+    <p>Please enter a remark explaining why this item is missing.</p>
+    <textarea id="missingRemarkInput" placeholder="e.g. Sent for repair, transferred to ICU…"></textarea>
+    <div class="modal-error-inline" id="missingRemarkError">A remark is required when marking an item as not found.</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="cancelMissing()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmMissing()">Mark as Not Found</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ──
+// Three roles. Passwords are stored as SHA-256 hashes only (never plaintext).
+//   Admin  → password: Laila@2026  (add/delete Bio numbers + everything)
+//   User   → password: User@2026   (check items only: ✓ / ✗)
+//   View   → password: View@2026   (view + verify the monthly sign-off)
+// To change a password: compute its SHA-256 and paste the hash below.
+const ROLES = {
+  admin: { hash: '816d1313116b0c30d25b5202397335cb24497c60f1306111bb69ebe8e888544b', label: 'Laila AlZadjali', tag: 'Admin' },
+  user:  { hash: 'cc66576333f36fb04050e842039951ddbdb54b5dcca031a5eb5861fa1e1a1f09', label: 'Inventory User', tag: 'User'  },
+  view:  { hash: '9f9f20ec6958d3c176c17ea3eb9731b053b6fc753367e3c25e3fb2578ec0f4e6', label: 'Verifier',       tag: 'View'  },
+};
+// Bump this whenever the built-in master inventory changes, so saved copies refresh.
+const DATA_VERSION = 4;
+// Capability matrix
+function can(cap) {
+  switch (cap) {
+    case 'check':    return currentRole === 'admin' || currentRole === 'user';
+    case 'editBios': return currentRole === 'admin';
+    case 'verify':   return currentRole === 'admin' || currentRole === 'view';
+    case 'save':     return currentRole === 'admin' || currentRole === 'user';
+    default:         return false;
+  }
+}
+
+// Pure-JS SHA-256 — works in any context (file://, local IP, etc.) without
+// requiring the secure-context crypto.subtle API. Produces identical hashes.
+function sha256(ascii) {
+  function rightRotate(value, amount) { return (value >>> amount) | (value << (32 - amount)); }
+  ascii = unescape(encodeURIComponent(ascii)); // UTF-8 encode
+  const mathPow = Math.pow;
+  const maxWord = mathPow(2, 32);
+  let result = '';
+  const words = [];
+  const asciiBitLength = ascii.length * 8;
+  let hash = sha256.h = sha256.h || [];
+  const k = sha256.k = sha256.k || [];
+  let primeCounter = k.length;
+  const isComposite = {};
+  for (let candidate = 2; primeCounter < 64; candidate++) {
+    if (!isComposite[candidate]) {
+      for (let i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+      hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+      k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+    }
+  }
+  ascii += '\x80';
+  while (ascii.length % 64 - 56) ascii += '\x00';
+  for (let i = 0; i < ascii.length; i++) {
+    const j = ascii.charCodeAt(i);
+    if (j >> 8) return;
+    words[i >> 2] |= j << ((3 - i) % 4) * 8;
+  }
+  words[words.length] = (asciiBitLength / maxWord) | 0;
+  words[words.length] = asciiBitLength;
+
+  for (let j = 0; j < words.length;) {
+    const w = words.slice(j, j += 16);
+    const oldHash = hash;
+    hash = hash.slice(0, 8);
+    for (let i = 0; i < 64; i++) {
+      const w15 = w[i - 15], w2 = w[i - 2];
+      const a = hash[0], e = hash[4];
+      const temp1 = hash[7]
+        + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+        + ((e & hash[5]) ^ ((~e) & hash[6]))
+        + k[i]
+        + (w[i] = i < 16 ? w[i] : (
+            w[i - 16]
+            + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3))
+            + w[i - 7]
+            + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+          ) | 0);
+      const temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+        + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(temp1 + temp2) | 0].concat(hash);
+      hash[4] = (hash[4] + temp1) | 0;
+    }
+    for (let i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+  }
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 3; j + 1; j--) {
+      const b = (hash[i] >> (j * 8)) & 255;
+      result += ((b < 16) ? 0 : '') + b.toString(16);
+    }
+  }
+  return result;
+}
+
+// Brute-force lockout
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 5;
+let lockoutUntil = 0;
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const TODAY_MONTH = new Date().getMonth(); // fixed real-world reference
+
+// ── Inventory Data ──
+const INVENTORY = [
+  // NOTE: No inventory data is stored in this public code, for confidentiality.
+  // Real data lives only in each authorised device's local storage.
+  // Admins build it via "Add Item" and can back it up with Export / restore with Import.
+];
+
+// ── State ──
+let currentRole = null;            // null | 'admin' | 'user' | 'view'
+let currentMonth = new Date().getMonth();
+// checkState[key][mi] = null | 'found' | { status:'missing', remark:'' }
+let checkState = {};
+// signOffState[mi] = { checkedBy:'', verifiedBy:'' }
+let signOffState = {};
+// verifyState[mi] = { submitted, submittedBy, submittedAt, verified, verifiedBy, verifiedAt }
+let verifyState = {};
+// biosState[itemId] = ['BIO1','BIO2'] — admin edits to the Bio-number lists
+let biosState = {};
+let searchTerm = '';
+let expandedItems = new Set();
+let pendingMissing = null; // { key, mi } while modal is open
+
+function ckKey(itemId, bioIndex) {
+  return bioIndex === null ? `${itemId}_item` : `${itemId}_${bioIndex}`;
+}
+
+function loadState() {
+  const saved = localStorage.getItem('nhc_inventory_2025');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    checkState   = parsed.checkState   || parsed;
+    signOffState = parsed.signOffState || {};
+    verifyState  = parsed.verifyState  || {};
+    biosState    = parsed.biosState    || {};
+  }
+  // Restore admin-edited inventory only if it was saved under the current data version.
+  // Otherwise keep the built-in (updated) master so new changes appear.
+  const parsedAll = saved ? JSON.parse(saved) : null;
+  const savedInv = (parsedAll && parsedAll.dataVersion === DATA_VERSION) ? parsedAll.inventory : null;
+  if (Array.isArray(savedInv) && savedInv.length) {
+    INVENTORY.length = 0;
+    savedInv.forEach(r => INVENTORY.push(r));
+  }
+}
+function saveState() {
+  localStorage.setItem('nhc_inventory_2025',
+    JSON.stringify({ dataVersion: DATA_VERSION, checkState, signOffState, verifyState, biosState, inventory: INVENTORY }));
+}
+
+// ── Build header ──
+function buildHeader() {
+  const tr = document.getElementById('tableHeader');
+  tr.innerHTML = `
+    <th style="min-width:36px">#</th>
+    <th style="min-width:220px">Item / Equipment</th>
+    <th style="min-width:60px;text-align:center">QTY</th>
+    <th style="min-width:120px">Bio Number</th>
+    <th style="min-width:160px">Remarks</th>
+    ${MONTHS.map((m,i) => `<th class="month-col" data-mi="${i}" style="min-width:62px">${m}</th>`).join('')}
+  `;
+}
+
+// ── Build month pills ──
+function buildMonthPills() {
+  const bar = document.querySelector('.month-bar');
+  bar.innerHTML = '<label>Jump to Month:</label>' + MONTHS.map((m,i) => `
+    <button class="month-pill ${i===currentMonth?'active':''}" onclick="setMonth(${i})">${m}</button>
+  `).join('');
+}
+
+function setMonth(i) {
+  currentMonth = i;
+  document.querySelectorAll('.month-pill').forEach((p,j) => p.classList.toggle('active', j===i));
+  const th = document.querySelector(`th[data-mi="${i}"]`);
+  if (th) th.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  renderRows();
+  updateStats();
+  renderSignOff();
+}
+
+// ── Render rows ──
+function renderRows() {
+  const tbody = document.getElementById('tableBody');
+  const q = searchTerm.trim().toLowerCase();
+
+  let filtered = INVENTORY.filter(row => {
+    if (!q) return true;
+    if (row.item.toLowerCase().includes(q)) return true;
+    if (row.bios.some(b => b.toLowerCase().includes(q))) return true;
+    return false;
+  });
+
+  if (q) {
+    filtered.sort((a, b) => {
+      const aB = a.bios.some(b2 => b2.toLowerCase().includes(q)) ? 0 : 1;
+      const bB = b.bios.some(b2 => b2.toLowerCase().includes(q)) ? 0 : 1;
+      return aB - bB;
+    });
+  }
+
+  document.getElementById('noResults').style.display = filtered.length ? 'none' : 'block';
+
+  const readonlyCls = can('check') ? '' : 'readonly';
+
+  function triCell(key, mi) {
+    const st        = checkState[key] && checkState[key][mi];
+    const isMissing = st && typeof st === 'object' && st.status === 'missing';
+    const isFound   = st === 'found';
+    const isPast    = mi < TODAY_MONTH;
+    const isFuture  = mi > TODAY_MONTH;
+    const note      = isMissing && st.remark ? `<div class="missing-note">${escapeHtml(st.remark)}</div>` : '';
+    const dim       = (mi !== currentMonth && !isPast) ? 'opacity:.4' : '';
+
+    if (isFuture) {
+      return `<td class="check-cell future" style="${mi !== currentMonth ? 'opacity:.35' : ''}">
+        <div class="chk-btns">
+          <button class="chk-btn" disabled>✓</button>
+          <button class="chk-btn" disabled>✗</button>
+        </div>
+        <span class="future-lock">locked</span>
+      </td>`;
+    }
+
+    const overdue = isPast && !isFound && !isMissing
+      ? `<div class="overdue-badge">overdue</div>` : '';
+
+    return `<td class="check-cell ${readonlyCls}" style="${dim}">
+      <div class="chk-btns">
+        <button class="chk-btn ${isFound?'found':''}" title="Found" onclick="setStatus('${key}',${mi},'found')">✓</button>
+        <button class="chk-btn ${isMissing?'missing':''}" title="Not Found" onclick="setStatus('${key}',${mi},'missing')">✗</button>
+      </div>${note}${overdue}
+    </td>`;
+  }
+
+  // Summary cell for collapsed header row
+  function summaryCell(row, mi) {
+    if (row.bios.length === 0) return triCell(ckKey(row.id, null), mi);
+    const keys     = row.bios.map((_, bi) => ckKey(row.id, bi));
+    const isPast   = mi < TODAY_MONTH;
+    const isFuture = mi > TODAY_MONTH;
+    const dim      = mi !== currentMonth ? 'opacity:.4' : '';
+
+    if (isFuture) {
+      return `<td class="check-cell future" style="${mi !== currentMonth ? 'opacity:.3' : ''}">
+        <span class="future-lock">locked</span></td>`;
+    }
+
+    let found = 0, missing = 0;
+    keys.forEach(k => {
+      const st = checkState[k] && checkState[k][mi];
+      if (st === 'found') found++;
+      else if (st && typeof st === 'object' && st.status === 'missing') missing++;
+    });
+    const unchecked = keys.length - found - missing;
+
+    if (found === 0 && missing === 0) {
+      return isPast
+        ? `<td class="check-cell" style="${dim}"><span class="summary-overdue">⚠ ${keys.length} overdue</span></td>`
+        : `<td class="check-cell" style="${dim}"><span class="summary-chk">–</span></td>`;
+    }
+    const parts = [];
+    if (found)   parts.push(`<span style="color:var(--green)">✓${found}</span>`);
+    if (missing) parts.push(`<span style="color:var(--red)">✗${missing}</span>`);
+    if (isPast && unchecked > 0) parts.push(`<span class="overdue-badge">+${unchecked} overdue</span>`);
+    return `<td class="check-cell" style="${dim}"><span class="summary-chk has-data">${parts.join(' ')}</span></td>`;
+  }
+
+  let rowNum = 0;
+  const html = [];
+
+  filtered.forEach(row => {
+    rowNum++;
+    const isExpanded = expandedItems.has(row.id);
+    const hasBios    = row.bios.length > 0;
+    const expandable = hasBios || can('editBios');
+
+    // ── Summary / header row ──
+    const bioHeaderCell = hasBios
+      ? `<td class="bio-col">
+           <button class="expand-btn ${isExpanded ? 'open' : ''}" onclick="toggleExpand(${row.id})">
+             <span class="arrow">▶</span>
+             <span class="bio-count-badge">📋 ${row.bios.length} Bio nos</span>
+           </button>
+         </td>`
+      : (can('editBios')
+        ? `<td class="bio-col">
+             <button class="expand-btn ${isExpanded ? 'open' : ''}" onclick="toggleExpand(${row.id})">
+               <span class="arrow">▶</span>
+               <span class="bio-count-badge" style="background:var(--blue-light);color:var(--blue)">＋ add Bio</span>
+             </button>
+           </td>`
+        : `<td class="bio-col"><span style="opacity:.35;font-size:.78rem">—</span></td>`);
+
+    const summaryCells = MONTHS.map((_, mi) => summaryCell(row, mi)).join('');
+
+    const itemEditBtns = can('editBios')
+      ? `<button class="mini-edit" title="Edit name" onclick="event.stopPropagation();editItemName(${row.id})">✎</button>` +
+        `<button class="mini-del" title="Delete item" onclick="event.stopPropagation();deleteItem(${row.id})">🗑</button>`
+      : '';
+    const qtyCell = can('editBios')
+      ? `<button class="qty-edit" title="Edit qty" onclick="event.stopPropagation();editQty(${row.id})">${row.qty} ✎</button>`
+      : row.qty;
+    const remarkEditBtn = can('check')
+      ? `<button class="mini-edit" title="Edit remarks" onclick="event.stopPropagation();editRemarks(${row.id})">✎</button>` : '';
+    const remarksCell = `<td class="remarks-col">${row.remarks ? highlightText(row.remarks, q) : '<span style="opacity:.3">—</span>'} ${remarkEditBtn}</td>`;
+
+    html.push(`<tr data-id="${row.id}" style="cursor:${expandable?'pointer':'default'}" onclick="if(event.target.closest('button')||!${expandable})return;toggleExpand(${row.id})">
+      <td style="color:var(--gray-400);font-size:.78rem">${rowNum}</td>
+      <td class="item-col">${highlightText(row.item, q)} ${itemEditBtns}</td>
+      <td class="qty-col">${qtyCell}</td>
+      ${bioHeaderCell}
+      ${remarksCell}
+      ${summaryCells}
+    </tr>`);
+
+    // ── Expanded bio sub-rows ──
+    if (expandable && isExpanded) {
+      row.bios.forEach((bio, bi) => {
+        const key      = ckKey(row.id, bi);
+        const bioMatch = q && bio.toLowerCase().includes(q);
+        const editDel  = can('editBios')
+          ? `<button class="bio-edit-btn" title="Edit" onclick="editBio(${row.id},${bi})">✎</button>` +
+            `<button class="bio-del-btn" title="Delete this Bio number" onclick="deleteBio(${row.id},${bi})">✕</button>` : '';
+        const bioDisp  = `<span class="bio-tag${bioMatch?' highlight':''}">${escapeHtml(bio)}</span>${editDel}`;
+        const months   = MONTHS.map((_, mi) => triCell(key, mi)).join('');
+        const sep      = bi > 0 ? 'border-top:1px dashed var(--gray-100)' : 'border-top:2px solid var(--blue-light)';
+        html.push(`<tr class="bio-sub-row" data-id="${row.id}" style="${sep}">
+          <td></td><td></td><td></td>
+          <td class="bio-col" style="padding-left:20px">${bioDisp}</td>
+          <td></td>
+          ${months}
+        </tr>`);
+      });
+      if (can('editBios')) {
+        html.push(`<tr class="bio-sub-row bio-add-row" data-id="${row.id}" style="border-top:1px dashed var(--gray-100)">
+          <td></td><td></td><td></td>
+          <td class="bio-col" style="padding-left:20px">
+            <button class="bio-add-btn" onclick="addBio(${row.id})">＋ Add Bio number</button>
+          </td>
+          <td colspan="13"></td>
+        </tr>`);
+      }
+    }
+  });
+
+  tbody.innerHTML = html.join('');
+}
+
+function renderAdminTools() {
+  const el = document.getElementById('adminTools');
+  if (!el) return;
+  if (can('editBios')) {
+    el.style.display = 'flex';
+    el.innerHTML = `<button class="btn btn-primary" onclick="addItem()">＋ Add Item / Equipment</button>
+      <button class="btn btn-outline" onclick="exportData()" title="Download a backup file of all data">⬇ Export / Backup</button>
+      <button class="btn btn-outline" onclick="importData()" title="Restore data from a backup file">⬆ Import / Restore</button>
+      <button class="btn btn-danger" onclick="clearDeviceData()" title="Erase all data from this device">🗑 Clear this device</button>
+      <span class="admin-tools-hint">Tap an item name or QTY to edit · expand a row to manage Bio numbers · Export regularly to keep a backup</span>`;
+  } else {
+    el.style.display = 'none';
+    el.innerHTML = '';
+  }
+}
+
+// ── Backup / Restore / Wipe (Admin) ──
+const STORAGE_KEY = 'nhc_inventory_2025';
+function exportData() {
+  if (!can('editBios')) return;
+  saveState();
+  const data = localStorage.getItem(STORAGE_KEY) || '{}';
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'NHC_inventory_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast('Backup file downloaded.');
+}
+function importData() {
+  if (!can('editBios')) return;
+  document.getElementById('importFile').click();
+}
+function handleImportFile(input) {
+  const file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed || typeof parsed !== 'object') throw new Error('bad');
+      if (!confirm('Restore this backup? It will REPLACE all current data on this device.')) return;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+      location.reload();
+    } catch (err) {
+      alert('That file is not a valid NHC backup.');
+    }
+  };
+  reader.readAsText(file);
+}
+function clearDeviceData() {
+  if (!can('editBios')) return;
+  if (!confirm('Erase ALL inventory data from THIS device? This cannot be undone.\n\nMake sure you have exported a backup first.')) return;
+  if (!confirm('Final confirmation: permanently clear all data on this device?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function toggleExpand(itemId) {
+  if (expandedItems.has(itemId)) expandedItems.delete(itemId);
+  else expandedItems.add(itemId);
+  renderRows();
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+}
+function highlightText(text, q) {
+  const safe = escapeHtml(text);
+  if (!q || !text.toLowerCase().includes(q)) return safe;
+  const re = new RegExp(`(${escapeRegex(escapeHtml(q))})`, 'gi');
+  return safe.replace(re, '<mark style="background:#fef08a;border-radius:2px">$1</mark>');
+}
+
+// ── Admin: add / edit / delete Items ──
+function nextItemId() { return INVENTORY.reduce((m, r) => Math.max(m, r.id), 0) + 1; }
+function addItem() {
+  if (!can('editBios')) return;
+  const name = (prompt('New item / equipment name:') || '').trim();
+  if (!name) return;
+  const qty = parseInt((prompt('Quantity:', '1') || '').trim(), 10) || 0;
+  const id = nextItemId();
+  INVENTORY.push({ id, item: name, qty, bios: [], remarks: '' });
+  expandedItems.add(id);
+  saveState(); renderRows(); updateStats();
+  toast('Item added.');
+}
+function editItemName(id) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === id); if (!row) return;
+  const name = (prompt('Edit item / equipment name:', row.item) || '').trim();
+  if (!name) return;
+  row.item = name; saveState(); renderRows();
+  toast('Item name updated.');
+}
+function editQty(id) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === id); if (!row) return;
+  const v = (prompt('Edit quantity:', row.qty) || '').trim();
+  if (v === '') return;
+  row.qty = parseInt(v, 10) || 0; saveState(); renderRows(); updateStats();
+}
+function editRemarks(id) {
+  if (!can('check')) return;
+  const row = INVENTORY.find(r => r.id === id); if (!row) return;
+  const v = prompt('Edit remarks for "' + row.item + '":', row.remarks || '');
+  if (v === null) return;
+  row.remarks = v.trim(); saveState(); renderRows();
+}
+function deleteItem(id) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === id); if (!row) return;
+  if (!confirm(`Delete item "${row.item}" and ALL its check data? This cannot be undone.`)) return;
+  INVENTORY.splice(INVENTORY.findIndex(r => r.id === id), 1);
+  Object.keys(checkState).forEach(k => { if (k.startsWith(id + '_')) delete checkState[k]; });
+  delete biosState[id];
+  expandedItems.delete(id);
+  saveState(); renderRows(); updateStats();
+  toast('Item deleted.');
+}
+
+// ── Admin: add / edit / delete Bio numbers ──
+function editBio(itemId, bi) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === itemId); if (!row) return;
+  const val = (prompt('Edit Bio number:', row.bios[bi]) || '').trim();
+  if (!val) return;
+  if (row.bios.some((b, i) => i !== bi && b.toLowerCase() === val.toLowerCase())) {
+    alert('That Bio number already exists for this item.'); return;
+  }
+  row.bios[bi] = val;
+  biosState[itemId] = row.bios.slice();
+  saveState(); renderRows();
+}
+function addBio(itemId) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === itemId);
+  if (!row) return;
+  const val = (prompt('Enter the new Bio number:') || '').trim();
+  if (!val) return;
+  if (row.bios.some(b => b.toLowerCase() === val.toLowerCase())) {
+    alert('That Bio number already exists for this item.');
+    return;
+  }
+  row.bios.push(val);
+  biosState[itemId] = row.bios.slice();
+  expandedItems.add(itemId);
+  saveState(); renderRows(); updateStats();
+}
+function deleteBio(itemId, bi) {
+  if (!can('editBios')) return;
+  const row = INVENTORY.find(r => r.id === itemId);
+  if (!row) return;
+  if (!confirm(`Delete Bio number "${row.bios[bi]}" from ${row.item}?`)) return;
+  // Remove its check history and re-index remaining keys for this item
+  row.bios.splice(bi, 1);
+  biosState[itemId] = row.bios.slice();
+  const newCheck = {};
+  Object.keys(checkState).forEach(k => {
+    const m = k.match(/^(\d+)_(\d+)$/);
+    if (!m || +m[1] !== itemId) { newCheck[k] = checkState[k]; return; }
+    const idx = +m[2];
+    if (idx === bi) return;            // drop deleted bio's data
+    const shifted = idx > bi ? idx - 1 : idx;
+    newCheck[`${itemId}_${shifted}`] = checkState[k];
+  });
+  checkState = newCheck;
+  saveState(); renderRows(); updateStats();
+}
+
+// ── Tri-state status ──
+function setStatus(key, mi, status) {
+  if (!can('check')) return;
+  const current = checkState[key] && checkState[key][mi];
+  if (status === 'found') {
+    // Toggle off if already found
+    if (current === 'found') {
+      checkState[key][mi] = null;
+    } else {
+      if (!checkState[key]) checkState[key] = {};
+      checkState[key][mi] = 'found';
+    }
+    saveState(); renderRows(); updateStats();
+  } else {
+    // Missing — require remark via modal
+    pendingMissing = { key, mi };
+    const existing = (current && typeof current === 'object') ? current.remark : '';
+    document.getElementById('missingRemarkInput').value = existing;
+    document.getElementById('missingRemarkError').style.display = 'none';
+    document.getElementById('missingModal').classList.add('open');
+    setTimeout(() => document.getElementById('missingRemarkInput').focus(), 100);
+  }
+}
+function confirmMissing() {
+  const remark = document.getElementById('missingRemarkInput').value.trim();
+  if (!remark) {
+    document.getElementById('missingRemarkError').style.display = 'block';
+    return;
+  }
+  const { key, mi } = pendingMissing;
+  if (!checkState[key]) checkState[key] = {};
+  checkState[key][mi] = { status: 'missing', remark };
+  pendingMissing = null;
+  document.getElementById('missingModal').classList.remove('open');
+  saveState(); renderRows(); updateStats();
+}
+function cancelMissing() {
+  pendingMissing = null;
+  document.getElementById('missingModal').classList.remove('open');
+}
+
+// ── Sign-off (Checked By / Verified By) ──
+function renderSignOff() {
+  const sf = signOffState[currentMonth] || {};
+  const cb = document.getElementById('checkedByInput');
+  const vb = document.getElementById('verifiedByInput');
+  cb.value = sf.checkedBy  || '';
+  vb.value = sf.verifiedBy || '';
+  cb.readOnly = !can('check');   // Checked By → Admin / User
+  vb.readOnly = !can('verify');  // Verified By → Admin / View
+  cb.classList.toggle('has-value', !!cb.value);
+  vb.classList.toggle('has-value', !!vb.value);
+  document.getElementById('signoffTitle').textContent =
+    `Monthly Sign-off — ${MONTHS[currentMonth]} 2026`;
+  renderVerifyBar();
+}
+function saveSignOff() {
+  if (!signOffState[currentMonth]) signOffState[currentMonth] = {};
+  if (can('check')) signOffState[currentMonth].checkedBy  = document.getElementById('checkedByInput').value;
+  if (can('verify')) signOffState[currentMonth].verifiedBy = document.getElementById('verifiedByInput').value;
+  document.getElementById('checkedByInput').classList.toggle('has-value', !!signOffState[currentMonth].checkedBy);
+  document.getElementById('verifiedByInput').classList.toggle('has-value', !!signOffState[currentMonth].verifiedBy);
+  saveState();
+}
+
+// ── Save & verify workflow ──
+// Admin/User press Save → month is submitted → View gets a verification notice.
+function submitForVerification() {
+  if (!can('save')) return;
+  saveSignOff();
+  const v = verifyState[currentMonth] || {};
+  v.submitted   = true;
+  v.submittedBy = ROLES[currentRole].label;
+  v.submittedAt = new Date().toISOString();
+  v.verified    = false;            // re-submitting resets verification
+  v.verifiedBy  = '';
+  v.verifiedAt  = '';
+  verifyState[currentMonth] = v;
+  saveState();
+  renderVerifyBar();
+  toast(`Saved. ${MONTHS[currentMonth]} sent to Verifier (View) for verification.`);
+}
+function verifyMonth() {
+  if (!can('verify')) return;
+  const v = verifyState[currentMonth];
+  if (!v || !v.submitted) { toast('Nothing submitted to verify yet.'); return; }
+  v.verified   = true;
+  v.verifiedBy = ROLES[currentRole].label;
+  v.verifiedAt = new Date().toISOString();
+  if (!signOffState[currentMonth]) signOffState[currentMonth] = {};
+  if (!signOffState[currentMonth].verifiedBy) signOffState[currentMonth].verifiedBy = ROLES[currentRole].label;
+  saveState();
+  renderSignOff();
+  toast(`${MONTHS[currentMonth]} verified ✓`);
+}
+function fmtTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) +
+    ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+function renderVerifyBar() {
+  const bar = document.getElementById('verifyBar');
+  if (!bar) return;
+  const v = verifyState[currentMonth] || {};
+  let html = '';
+
+  // Save button for Admin / User
+  if (can('save')) {
+    html += `<button class="btn btn-primary" onclick="submitForVerification()">💾 Save &amp; Send to Verify</button>`;
+  }
+  // Verify button for View / Admin
+  if (can('verify') && v.submitted && !v.verified) {
+    html += `<button class="btn btn-success" onclick="verifyMonth()">✅ Verify ${MONTHS[currentMonth]}</button>`;
+  }
+  // Status chips
+  if (v.verified) {
+    html += `<span class="verify-chip ok">✓ Verified by ${escapeHtml(v.verifiedBy)} · ${fmtTime(v.verifiedAt)}</span>`;
+  } else if (v.submitted) {
+    html += `<span class="verify-chip pending">⏳ Awaiting verification · submitted by ${escapeHtml(v.submittedBy)} · ${fmtTime(v.submittedAt)}</span>`;
+  } else {
+    html += `<span class="verify-chip none">Not yet saved/submitted</span>`;
+  }
+  bar.innerHTML = html;
+}
+// Notification banner for the View (verifier): list every month awaiting them
+function renderNotifications() {
+  const box = document.getElementById('notifyBanner');
+  if (!box) return;
+  if (!can('verify')) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  const pending = MONTHS.map((m, i) => ({ m, i }))
+    .filter(x => verifyState[x.i] && verifyState[x.i].submitted && !verifyState[x.i].verified);
+  if (!pending.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  box.style.display = 'flex';
+  box.innerHTML = `<span class="notify-icon">🔔</span>
+    <span><strong>${pending.length} month(s) awaiting your verification:</strong>
+    ${pending.map(p => `<button class="notify-link" onclick="setMonth(${p.i})">${p.m}</button>`).join(' ')}</span>`;
+}
+function toast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._tid);
+  toast._tid = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+
+
+// ── Stats ──
+function updateStats() {
+  let totalBoxes = 0, foundBoxes = 0, missingBoxes = 0;
+  INVENTORY.forEach(row => {
+    const keys = row.bios.length ? row.bios.map((_, bi) => ckKey(row.id, bi)) : [ckKey(row.id, null)];
+    totalBoxes += keys.length;
+    keys.forEach(k => {
+      const st = checkState[k] && checkState[k][currentMonth];
+      if (st === 'found') foundBoxes++;
+      else if (st && typeof st === 'object' && st.status === 'missing') missingBoxes++;
+    });
+  });
+  document.getElementById('statItems').textContent = INVENTORY.length;
+  document.getElementById('statQty').textContent = INVENTORY.reduce((s, r) => s + r.qty, 0);
+  document.getElementById('statMonth').textContent = MONTHS[currentMonth];
+  document.getElementById('statVerified').textContent = `✓ ${foundBoxes}  ✗ ${missingBoxes}  / ${totalBoxes}`;
+}
+
+// ── Search ──
+function applySearch() {
+  searchTerm = document.getElementById('searchInput').value;
+  const q = searchTerm.trim().toLowerCase();
+  // Auto-expand items whose bio numbers match the search
+  if (q) {
+    INVENTORY.forEach(row => {
+      if (row.bios.some(b => b.toLowerCase().includes(q))) expandedItems.add(row.id);
+    });
+  }
+  renderRows();
+}
+
+// ── Admin ──
+function openAdminModal() {
+  document.getElementById('adminModal').classList.add('open');
+  document.getElementById('adminPw').value = '';
+  document.getElementById('pwError').style.display = 'none';
+  setTimeout(() => document.getElementById('adminPw').focus(), 100);
+}
+function closeAdminModal() {
+  document.getElementById('adminModal').classList.remove('open');
+}
+// Shared: validate a password value against the three roles, with lockout.
+// Returns the matched role name, or null. Writes errors to the given element.
+function validatePassword(value, errEl) {
+  if (Date.now() < lockoutUntil) {
+    const secs = Math.ceil((lockoutUntil - Date.now()) / 1000);
+    errEl.textContent = `Too many attempts. Try again in ${secs}s.`;
+    return null;
+  }
+  const hash = sha256(value);
+  const matched = Object.keys(ROLES).find(r => ROLES[r].hash === hash);
+  if (matched) { loginAttempts = 0; errEl.textContent = ''; return matched; }
+  loginAttempts++;
+  if (loginAttempts >= MAX_ATTEMPTS) {
+    lockoutUntil = Date.now() + 5 * 60 * 1000; // 5 min lockout
+    loginAttempts = 0;
+    errEl.textContent = 'Too many failed attempts. Locked for 5 minutes.';
+  } else {
+    errEl.textContent = `Incorrect password. ${MAX_ATTEMPTS - loginAttempts} attempt(s) remaining.`;
+  }
+  return null;
+}
+
+// Apply a successful login: set role, update header badge, render everything.
+function applyRole(matched) {
+  currentRole = matched;
+  const now = new Date();
+  document.getElementById('loginDate').textContent =
+    now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) +
+    ' ' + now.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  document.getElementById('adminBadge').firstChild.textContent =
+    `⚡ ${ROLES[matched].label} (${ROLES[matched].tag}) — `;
+  document.getElementById('adminLoginBtn').style.display = 'none';
+  document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
+  document.getElementById('adminBadge').classList.add('visible');
+  renderRows();
+  renderSignOff();
+  renderNotifications();
+  renderAdminTools();
+}
+
+// Full-screen gate login (primary entry point)
+function gateLogin() {
+  const pwEl  = document.getElementById('gatePw');
+  const errEl = document.getElementById('gateError');
+  const matched = validatePassword(pwEl.value, errEl);
+  if (!matched) { pwEl.value = ''; pwEl.focus(); return; }
+  applyRole(matched);
+  document.getElementById('loginGate').style.display = 'none';
+  document.body.classList.remove('locked');
+  pwEl.value = '';
+}
+
+// Modal login (kept for compatibility; not the main path)
+function checkAdmin() {
+  const matched = validatePassword(document.getElementById('adminPw').value,
+                                   document.getElementById('pwError'));
+  document.getElementById('pwError').style.display = 'block';
+  if (!matched) { document.getElementById('adminPw').value = ''; return; }
+  closeAdminModal();
+  applyRole(matched);
+}
+
+function adminLogout() {
+  currentRole = null;
+  document.getElementById('adminLogoutBtn').style.display = 'none';
+  document.getElementById('adminBadge').classList.remove('visible');
+  // Re-lock: show the gate again (login required every time)
+  const gate = document.getElementById('loginGate');
+  gate.style.display = 'flex';
+  document.body.classList.add('locked');
+  document.getElementById('gateError').textContent = '';
+  const pw = document.getElementById('gatePw'); pw.value = '';
+  setTimeout(() => pw.focus(), 100);
+}
+
+// ── Init ──
+loadState();
+buildHeader();
+buildMonthPills();
+renderRows();
+updateStats();
+renderSignOff();
+renderNotifications();
+renderAdminTools();
+
+// Start locked behind the login gate (login required on every open)
+document.body.classList.add('locked');
+setTimeout(() => document.getElementById('gatePw').focus(), 150);
+</script>
+</body>
+</html>
